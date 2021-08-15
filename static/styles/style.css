@@ -1,0 +1,346 @@
+/* 
+************************
+  Table of Contents
+    1. Global Styles
+    2. Typography
+    3. Components
+    4. Pages
+      4.1 Homepage
+      4.2 Terms & Conditions
+      4.3 Privacy Policy
+      4.4 ...
+    5. Animations
+    6. Helpers
+************************
+*/
+/* 
+******************
+  1. Global Styles
+******************
+*/
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  position: relative;
+  background-color: #222222;
+  min-height: 100vh;
+}
+
+nav {
+  min-height: 10vh;
+  padding: 3.5rem 4rem;
+}
+
+.logo {
+  font-size: 2.5rem;
+  text-decoration: none;
+}
+
+footer {
+  position: relative;
+  bottom: 2rem;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  margin-top: 10rem;
+}
+
+footer a:hover {
+  text-decoration: none;
+}
+
+/* 
+  ********************
+    2. Typography
+  ********************
+  */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+small,
+label,
+li,
+button {
+  color: white;
+  font-family: serif;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h4,
+p,
+a,
+pre,
+li {
+  font-size: 1.6rem;
+}
+
+h5 {
+  font-size: 1.4rem;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+ol,
+ul {
+  margin-left: 2rem;
+}
+
+li {
+  margin: 2rem 0;
+}
+
+small,
+small a {
+  font-size: 1.2rem;
+}
+
+/* 
+  ********************
+    3. Components
+  ********************
+  */
+.sign-in {
+  display: inline-block;
+  position: relative;
+  left: 90%;
+  top: 0;
+  -webkit-transform: translateX(-100%);
+          transform: translateX(-100%);
+  margin: 2rem 3rem;
+  color: #d3736f;
+}
+
+a.button,
+button {
+  background-color: #a94245;
+  min-width: 6rem;
+  padding: 1rem 1.5rem;
+}
+
+button {
+  border: none;
+}
+
+/* 
+  ********************
+    4. Pages
+  ********************
+  */
+/* 
+  4.1 Homepage 
+  */
+h1.page-title {
+  font-size: 6rem;
+  margin: 5rem 0;
+  text-align: center;
+}
+
+form.generic-url {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin: 3rem 20%;
+}
+
+.generic-url div {
+  width: 79%;
+}
+
+.generic-url input {
+  padding: 2.05rem 0.5rem;
+  width: 100%;
+  font-family: monospace;
+}
+
+button.ittify {
+  display: inline;
+  -ms-flex-item-align: end;
+      align-self: flex-end;
+  padding: 1rem 0.5rem;
+  width: 19%;
+  height: 6rem;
+  cursor: pointer;
+}
+
+.generated-url-section {
+  width: 100%;
+  text-align: center;
+}
+
+.generated-url-description {
+  font-size: 2em;
+}
+
+.generated-url {
+  font-family: monospace;
+  font-size: 4rem;
+  color: #d3736f;
+  background-color: transparent;
+  border: none;
+  cursor: text;
+}
+
+#copy-url {
+  background-color: transparent;
+  color: #222222;
+  border: none;
+}
+
+.alert-copied {
+  font-size: 2rem;
+  padding: 1rem 0.5rem;
+  border-radius: 1rem;
+  background-color: rgba(211, 115, 111, 0.5);
+  margin-top: 2rem;
+}
+
+.signin-features {
+  position: fixed;
+  bottom: 8rem;
+  left: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  width: 100%;
+}
+
+/* 
+  4.2 Terms & Conditions 
+  */
+main.legal {
+  width: 80%;
+  margin: auto;
+}
+
+.legal.table-of-contents {
+  float: right;
+  width: 33%;
+  max-width: 25rem;
+  min-width: 20rem;
+  margin: 0 3rem 3rem 3rem;
+  padding: 3rem 1.6rem;
+  background-color: #373737;
+}
+
+.toc-ol {
+  padding-left: 1.6rem;
+}
+
+.terms-item {
+  font-size: 2.5rem;
+}
+
+.terms-item,
+.terms-item h2 {
+  color: #d3736f;
+}
+
+.terms-item ul {
+  list-style-type: disc;
+}
+
+.terms-item p,
+.terms-item li {
+  color: white;
+}
+
+/* 
+  ********************
+    5. Animations
+  ********************
+  */
+.shake {
+  -webkit-transform-origin: center bottom;
+          transform-origin: center bottom;
+  -webkit-animation: shake 0.15s ease-in 3;
+          animation: shake 0.15s ease-in 3;
+}
+
+@-webkit-keyframes shake {
+  25% {
+    -webkit-transform: rotateZ(5deg);
+            transform: rotateZ(5deg);
+  }
+  75% {
+    -webkit-transform: rotateZ(-5deg);
+            transform: rotateZ(-5deg);
+  }
+  100% {
+    -webkit-transform: rotateZ(0);
+            transform: rotateZ(0);
+  }
+}
+
+@keyframes shake {
+  25% {
+    -webkit-transform: rotateZ(5deg);
+            transform: rotateZ(5deg);
+  }
+  75% {
+    -webkit-transform: rotateZ(-5deg);
+            transform: rotateZ(-5deg);
+  }
+  100% {
+    -webkit-transform: rotateZ(0);
+            transform: rotateZ(0);
+  }
+}
+
+/* 
+  ********************
+    6. Helpers
+  ********************
+  */
+.hidden {
+  display: none;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+.center-content {
+  width: 100%;
+  text-align: center;
+}
+/*# sourceMappingURL=style.css.map */

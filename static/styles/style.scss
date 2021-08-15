@@ -1,0 +1,318 @@
+/* 
+************************
+  Table of Contents
+    1. Global Styles
+    2. Typography
+    3. Components
+    4. Pages
+      4.1 Homepage
+      4.2 Terms & Conditions
+      4.3 Privacy Policy
+      4.4 ...
+    5. Animations
+    6. Helpers
+************************
+*/
+
+/* 
+******************
+  1. Global Styles
+******************
+*/
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 62.5%;
+}
+
+body {
+	position: relative;
+	background-color: rgb(34, 34, 34);
+	min-height: 100vh;
+}
+
+nav {
+	min-height: 10vh;
+	padding: 3.5rem 4rem;
+}
+
+.logo {
+	font-size: 2.5rem;
+	text-decoration: none;
+}
+
+footer {
+	position: relative;
+	bottom: 2rem;
+	left: 50%;
+	transform: translateX(-50%);
+	margin-top: 10rem;
+}
+
+footer a:hover {
+	text-decoration: none;
+}
+
+/* 
+  ********************
+    2. Typography
+  ********************
+  */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+small,
+label,
+li,
+button {
+	color: white;
+	font-family: serif;
+}
+
+h1 {
+	font-size: 3rem;
+}
+
+h2 {
+	font-size: 2.5rem;
+}
+
+h3 {
+	font-size: 2rem;
+}
+
+h4,
+p,
+a,
+pre,
+li {
+	font-size: 1.6rem;
+}
+
+h5 {
+	font-size: 1.4rem;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+ol,
+ul {
+	margin-left: 2rem;
+}
+
+li {
+	margin: 2rem 0;
+}
+
+small,
+small a {
+	font-size: 1.2rem;
+}
+
+/* 
+  ********************
+    3. Components
+  ********************
+  */
+
+.sign-in {
+	display: inline-block;
+	position: relative;
+	left: 90%;
+	top: 0;
+	transform: translateX(-100%);
+	margin: 2rem 3rem;
+	color: rgb(211, 115, 111);
+}
+
+a.button,
+button {
+	background-color: rgb(169, 66, 69);
+	min-width: 6rem;
+	padding: 1rem 1.5rem;
+}
+
+button {
+	border: none;
+}
+
+/* 
+  ********************
+    4. Pages
+  ********************
+  */
+
+/* 
+  4.1 Homepage 
+  */
+
+h1.page-title {
+	font-size: 6rem;
+	margin: 5rem 0;
+	text-align: center;
+}
+
+form.generic-url {
+	display: flex;
+	justify-content: space-between;
+	margin: 3rem 20%;
+}
+
+.generic-url div {
+	width: 79%;
+}
+
+.generic-url input {
+	padding: 2.05rem 0.5rem;
+	width: 100%;
+	font-family: monospace;
+}
+
+button.ittify {
+	display: inline;
+	align-self: flex-end;
+	padding: 1rem 0.5rem;
+	width: 19%;
+	height: 6rem;
+	cursor: pointer;
+}
+
+.generated-url-section {
+	width: 100%;
+	text-align: center;
+}
+
+.generated-url-description {
+	font-size: 2em;
+}
+
+.generated-url {
+	font-family: monospace;
+	font-size: 4rem;
+	color: rgb(211, 115, 111);
+	background-color: transparent;
+	border: none;
+	cursor: text;
+}
+
+#copy-url {
+	background-color: transparent;
+	color: rgb(34, 34, 34);
+	border: none;
+}
+
+.alert-copied {
+	font-size: 2rem;
+	padding: 1rem 0.5rem;
+	border-radius: 1rem;
+	background-color: rgba(211, 115, 111, 0.5);
+	margin-top: 2rem;
+}
+
+.signin-features {
+	position: fixed;
+	bottom: 8rem;
+	left: 50%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	transform: translateX(-50%);
+	width: 100%;
+}
+
+/* 
+  4.2 Terms & Conditions 
+  */
+
+main.legal {
+	width: 80%;
+	margin: auto;
+}
+
+.legal.table-of-contents {
+	float: right;
+	width: 33%;
+	max-width: 25rem;
+	min-width: 20rem;
+	margin: 0 3rem 3rem 3rem;
+	padding: 3rem 1.6rem;
+	background-color: rgb(55, 55, 55);
+}
+
+.toc-ol {
+	padding-left: 1.6rem;
+}
+
+.terms-item {
+	font-size: 2.5rem;
+}
+
+.terms-item,
+.terms-item h2 {
+	color: rgb(211, 115, 111);
+}
+
+.terms-item ul {
+	list-style-type: disc;
+}
+
+.terms-item p,
+.terms-item li {
+	color: white;
+}
+
+/* 
+  ********************
+    5. Animations
+  ********************
+  */
+
+.shake {
+	transform-origin: center bottom;
+	animation: shake 0.15s ease-in 3;
+}
+
+@keyframes shake {
+	25% {
+		transform: rotateZ(5deg);
+	}
+	75% {
+		transform: rotateZ(-5deg);
+	}
+	100% {
+		transform: rotateZ(0);
+	}
+}
+
+/* 
+  ********************
+    6. Helpers
+  ********************
+  */
+
+.hidden {
+	display: none;
+}
+
+.invisible {
+	visibility: hidden;
+}
+
+.center-content {
+	width: 100%;
+	text-align: center;
+}

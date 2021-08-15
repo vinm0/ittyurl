@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet" />
+    <title>{% block title %}{% endblock title%}</title>
+  </head>
+  <body>
+    <nav>
+      <a class="logo {{hidden_logo}}" href="/">IttyUrl</a>
+      <a href="#" class="sign-in hidden">Sign-in</a>
+    </nav>
+
+      {% block body %}{% endblock body%}
+
+    <footer class="center-content">
+      <small class="legal-footer">
+        <a href="/terms">Terms of Service</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        <a href="/privacy">Privacy Policy</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+        <a href="mailto:help@ittyurl.me?subject=Site%20Issue%20--%20Itty%20Url&body=Thank%20you%20for%20contacting%20us!%0APlease%20describe%20the%20issue%20below.%0A%0A">Report an Issue</a>
+        <br><br>
+        <span>&copy; <span class="copyright">2021</span> <a href="https://weblingstudio.com">Webling Studio</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;All Rights Reserved</span>
+      </small>
+    </footer>
+
+    <script>
+      const copyrightElement = document.getElementsByClassName("copyright")[0]
+      let d = new Date();
+      let year = d.getFullYear();
+      
+      copyrightElement.innerHTML = year
+    </script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>
