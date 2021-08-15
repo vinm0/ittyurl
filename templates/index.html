@@ -1,8 +1,5 @@
-{% extends "base.html" %}
+{{define "content"}}
 
-{% block title %}Itty URL{% endblock %}
-
-{% block body %}
   <header>
     <h1 class="page-title">Itty URL</h1>
   </header>
@@ -13,7 +10,7 @@
         <div>
           <label for="destination_url"><pre>Enter url to shorten</pre></label>
           <input type="text" title="Enter url" required maxlength="2000" name="destination_url" 
-                 id="destination_url" placeholder="https://" value="{{destination_url}}" 
+                 id="destination_url" placeholder="https://" value="" 
                  oninvalid="setCustomValidity('Max characters exceeded: 2000')">
         </div>
         <button type="submit" class="ittify" title="Click to shorten url"><h3>ittify</h3></button>
@@ -21,9 +18,9 @@
     </section>
     <br><br>
 
-    <section class="generated-url-section {{hidden}}">
-      <span class="generated-url center-content">itty-url.herokuapp.com/{{url_id}}</span><br>
-      <input type="text" id="copy-url" name="copy-url" value="itty-url.herokuapp.com/{{url_id}}"><br>
+    <section class="generated-url-section">
+      <span class="generated-url center-content">ittyurl.me/{{.alt}}</span><br>
+      <input type="text" id="copy-url" name="copy-url" value="ittyurl.me/{{.alt}}"><br>
       <button id="copy-btn" title="Click to copy url" onclick="copyUrl()">Copy Url</button>
     </section>
     
@@ -33,32 +30,4 @@
     </section>
 
   </main>
-{% endblock %}
-
-{% block scripts %}
-  <script>
-    function copyUrl() {
-      /* Get the text field */
-      const copyText = document.getElementById("copy-url");
-      const copyBtn = document.getElementById("copy-btn");
-
-      // Activate copy-url
-      copyText.classList.remove("invisible");
-      copyBtn.classList.remove("shake");
-
-      /* Select the text field */
-      copyText.select();
-      copyText.setSelectionRange(0, 99999); /*For mobile devices*/
-
-      /* Copy the text inside the text field */
-      document.execCommand("copy");
-
-      // Deactivate copy-url
-      copyText.classList.add("invisible");
-
-      /* Change copy button to read "Copied!" */
-      copyBtn.innerHTML = "Copied!";
-      copyBtn.classList.add("shake")
-    };
-  </script>
-{% endblock %}
+{{end}}
