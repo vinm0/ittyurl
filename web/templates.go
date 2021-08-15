@@ -1,11 +1,18 @@
 package web
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 )
+
+/*
+ * **********************************************
+ * **********************************************
+ * **************** Definitions *****************
+ * **********************************************
+ * **********************************************
+ */
 
 const (
 	TMPL_DIR  = "templates/"
@@ -24,39 +31,46 @@ type Template struct {
 	template *template.Template
 }
 
+/*
+ * **********************************************
+ * **********************************************
+ * ***************** Functions ******************
+ * **********************************************
+ * **********************************************
+ */
+
+// Render checks if a template exists for the page title.
+// If a template exists, Render calls to execute the existing template.
+// If a template does not exist, Render parses the specified templates,
+// registers the template, and executes the new template.
 func Render(w http.ResponseWriter, p *Page, templates ...string) {
 	title, _ := p.Get(TITLE).(string)
 
-	fmt.Println("Received title", title)
-
+	// Check if template exists in the template map.
 	t, exists := tmap[title]
-	fmt.Println(title, "exists:", exists)
 	if exists {
-		fmt.Println(p)
 		t.Serve(w, p)
 		return
 	}
 
-	fmt.Println("Creating new template from", templates)
-
 	templ := template.Must(template.ParseFiles(templates...))
 
-	fmt.Println("Adding template to map")
-
+	// Add new template to template map.
 	t = &Template{templ}
 	tmap[title] = t
 
-	fmt.Println("Executing Template")
-	err := templ.Execute(w, p)
+	t.Serve(w, p)
+}
+
+// Serve executes the template provided by the receiver
+func (t *Template) Serve(w http.ResponseWriter, p *Page) {
+	err := t.template.Execute(w, p)
 	if err != nil {
-		log.Println(err.Error(), "unable to execute template", templ)
+		log.Println(err.Error(), t.template)
 	}
 }
 
-func (t *Template) Serve(w http.ResponseWriter, p *Page) {
-	t.template.Execute(w, p)
-}
-
+// Initializes the template map
 func initTmap() {
 	tmap = map[string]*Template{}
 }

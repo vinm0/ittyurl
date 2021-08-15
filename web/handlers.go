@@ -17,3 +17,10 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 
 	Render(w, p, TMPL_BASE, TMPL_HOME)
 }
+
+func handleSignout(w http.ResponseWriter, r *http.Request) {
+	session := CurrentSession(r)
+	session.Clear(w, r)
+
+	http.Redirect(w, r, "/", http.StatusFound)
+}

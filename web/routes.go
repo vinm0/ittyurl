@@ -11,7 +11,9 @@ const (
 
 func Launch() {
 	initTmap()
+	SessionStart()
 
+	http.HandleFunc("/signout", handleSignout)
 	http.HandleFunc("/", handleHome)
 
 	http.Handle("/static/",

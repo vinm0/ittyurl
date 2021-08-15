@@ -26,4 +26,4 @@ function copyUrl() {
     /* Change copy button to read "Copied!" */
     copyBtn.innerHTML = "Copied!";
     copyBtn.classList.add("shake")
-  };
+};
