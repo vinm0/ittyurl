@@ -15,14 +15,18 @@ import (
  */
 
 const (
-	TMPL_DIR    = "templates/"
-	TMPL_HOME   = TMPL_DIR + "index.html"
-	TMPL_BASE   = TMPL_DIR + "base.html"
-	TMPL_SIGNIN = TMPL_DIR + "signin.html"
+	TMPL_DIR     = "templates/"
+	TMPL_HOME    = TMPL_DIR + "index.html"
+	TMPL_BASE    = TMPL_DIR + "base.html"
+	TMPL_SIGNIN  = TMPL_DIR + "signin.html"
+	TMPL_PRIVACY = TMPL_DIR + "privacy.html"
+	TMPL_TERMS   = TMPL_DIR + "terms.html"
 
-	TITLE        = "title"
-	TITLE_SITE   = "IttyURL"
-	TITLE_SIGNIN = "Sign-in"
+	TITLE         = "title"
+	TITLE_SITE    = "IttyURL"
+	TITLE_SIGNIN  = "Sign-in"
+	TITLE_PRIVACY = "Privacy"
+	TITLE_TERMS   = "Terms and Conditions"
 )
 
 var (

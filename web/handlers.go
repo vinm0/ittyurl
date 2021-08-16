@@ -10,6 +10,10 @@ func (p *Page) Get(name string) interface{} {
 	return (*p)[name]
 }
 
+func (p *Page) Add(name string, val interface{}) {
+	(*p)[name] = val
+}
+
 func newPage(title string) *Page {
 	return &Page{TITLE: title}
 }
@@ -43,6 +47,24 @@ func handleSignout(w http.ResponseWriter, r *http.Request) {
 	session.Clear(w, r)
 
 	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func handleStaticPage(w http.ResponseWriter, r *http.Request) {
+	title := ""
+	templ := ""
+
+	switch r.URL.Path {
+	case PATH_PRIVACY:
+		title = TITLE_PRIVACY
+		templ = TMPL_PRIVACY
+	case PATH_TERMS:
+		title = TITLE_TERMS
+		templ = TMPL_TERMS
+	}
+
+	p := newPage(title)
+
+	p.Render(w, TMPL_BASE, templ)
 }
 
 func PostMethod(r *http.Request) bool {
