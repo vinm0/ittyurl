@@ -15,12 +15,14 @@ import (
  */
 
 const (
-	TMPL_DIR  = "templates/"
-	TMPL_HOME = TMPL_DIR + "index.html"
-	TMPL_BASE = TMPL_DIR + "base.html"
+	TMPL_DIR    = "templates/"
+	TMPL_HOME   = TMPL_DIR + "index.html"
+	TMPL_BASE   = TMPL_DIR + "base.html"
+	TMPL_SIGNIN = TMPL_DIR + "signin.html"
 
-	SITE_TITLE = "IttyURL"
-	TITLE      = "title"
+	TITLE        = "title"
+	TITLE_SITE   = "IttyURL"
+	TITLE_SIGNIN = "Sign-in"
 )
 
 var (
@@ -43,7 +45,9 @@ type Template struct {
 // If a template exists, Render calls to execute the existing template.
 // If a template does not exist, Render parses the specified templates,
 // registers the template, and executes the new template.
-func Render(w http.ResponseWriter, p *Page, templates ...string) {
+func (p *Page) Render(w http.ResponseWriter, templates ...string) {
+	InitTmap()
+
 	title, _ := p.Get(TITLE).(string)
 
 	// Check if template exists in the template map.
@@ -70,7 +74,9 @@ func (t *Template) Serve(w http.ResponseWriter, p *Page) {
 	}
 }
 
-// Initializes the template map
-func initTmap() {
-	tmap = map[string]*Template{}
+// Initializes the template map if not yet initialized
+func InitTmap() {
+	if tmap == nil {
+		tmap = map[string]*Template{}
+	}
 }

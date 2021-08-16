@@ -7,14 +7,18 @@ import (
 
 const (
 	PORT = ":8080"
+
+	// Domain Paths
+	PATH_HOME    = "/"
+	PATH_SIGNIN  = "/signin"
+	PATH_SIGNOUT = "/signout"
+	PATH_PROFILE = "/profile"
 )
 
 func Launch() {
-	initTmap()
-	SessionStart()
-
-	http.HandleFunc("/signout", handleSignout)
-	http.HandleFunc("/", handleHome)
+	http.HandleFunc(PATH_SIGNIN, handleSignin)
+	http.HandleFunc(PATH_SIGNOUT, handleSignout)
+	http.HandleFunc(PATH_HOME, handleHome)
 
 	http.Handle("/static/",
 		http.StripPrefix("/static/",
