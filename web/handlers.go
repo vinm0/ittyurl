@@ -19,6 +19,11 @@ func newPage(title string) *Page {
 }
 
 func handleHome(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		handleStaticPage(w, r)
+		return
+	}
+
 	p := newPage(TITLE_SITE)
 
 	p.Render(w, TMPL_BASE, TMPL_HOME)
@@ -60,6 +65,9 @@ func handleStaticPage(w http.ResponseWriter, r *http.Request) {
 	case PATH_TERMS:
 		title = TITLE_TERMS
 		templ = TMPL_TERMS
+	default:
+		title = "Page Not Found"
+		templ = TMPL_ERR
 	}
 
 	p := newPage(title)

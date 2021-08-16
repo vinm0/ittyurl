@@ -21,6 +21,7 @@ const (
 	TMPL_SIGNIN  = TMPL_DIR + "signin.html"
 	TMPL_PRIVACY = TMPL_DIR + "privacy.html"
 	TMPL_TERMS   = TMPL_DIR + "terms.html"
+	TMPL_ERR     = TMPL_DIR + "brokenlink.html"
 
 	TITLE         = "title"
 	TITLE_SITE    = "IttyURL"
