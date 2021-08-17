@@ -2,6 +2,8 @@ package web
 
 import (
 	"net/http"
+
+	"github.com/vinm0/ittyurl/data"
 )
 
 // page contains the data to be processed within a template.
@@ -35,14 +37,19 @@ func NewPage(title string) *page {
 // Handles the root path and all undefined paths
 func handleHome(w http.ResponseWriter, r *http.Request) {
 	// Unrecognized paths will be directed to custom 404
-	if r.URL.Path != "/" {
-		handleStaticPage(w, r)
+	if r.URL.Path == PATH_HOME {
+		p := NewPage(TITLE_SITE)
+		p.Serve(w, TMPL_BASE, TMPL_HOME)
 		return
 	}
 
-	p := NewPage(TITLE_SITE)
+	if path, found := data.RegisteredPath(r.URL.Path); found {
+		http.Redirect(w, r, path, http.StatusFound)
+		return
+	}
 
-	p.Serve(w, TMPL_BASE, TMPL_HOME)
+	handleStaticPage(w, r)
+	return
 }
 
 // Handles Post requests for new rows in the database

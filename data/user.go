@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"net"
 	"net/http"
 	"strings"
@@ -8,7 +9,12 @@ import (
 )
 
 const (
-	USERID_PUB = 0
+	USERID_PUBLIC = 0
+
+	ACCTTYPE_PUBL = 0
+	ACCTTYPE_FREE = 1000
+	ACCTTYPE_PAID = 2000
+	ACCTTYPE_PREM = 3000
 
 	TIME_FORMAT = "2006-01-02 15:04"
 )
@@ -34,6 +40,9 @@ func (usr *User) CreateUser() (errMsg string) {
 
 func (usr *User) CreateUrl(r *http.Request) (url *Url, errMsg string) {
 	ip := net.ParseIP(strings.Split(r.Header.Get("X-Forwarded-For"), " ")[0])
+
+	fmt.Println("Raw Header IP:", r.Header.Get("X-Forwarded-For"))
+	fmt.Println("Formatted IP:", ip)
 
 	if usr.exceedUrlLmit(ip) {
 		return nil, "Exceeded url creation limits"

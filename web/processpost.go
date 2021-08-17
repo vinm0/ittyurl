@@ -23,12 +23,18 @@ func NewUrl(w http.ResponseWriter, r *http.Request) {
 
 func NewUser(w http.ResponseWriter, r *http.Request) {
 	session := CurrentSession(r)
-	usr := session.User()
+	usr := data.FormUser(r)
 
-	if usr = data.FormUser(r); usr == nil {
+	if usr == nil {
 		msg := "Something went wrong creating account. Try again"
 		session.RedirectFlash(r, w, PATH_SIGNUP, msg)
 		return
 	}
-	usr.CreateUser()
+
+	if msg := usr.CreateUser(); msg != "" {
+		session.RedirectFlash(r, w, PATH_SIGNUP, msg)
+		return
+	}
+
+	http.Redirect(w, r, PATH_SIGNIN, http.StatusFound)
 }

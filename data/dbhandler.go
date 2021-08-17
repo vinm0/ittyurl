@@ -39,6 +39,8 @@ func createUrl(url *Url) error {
 	return insert(url)
 }
 
+// UrlBySource returns the Url instance with the corresponding src url address.
+// Returns nil, if no Url is found.
 func UrlBySource(src string) *Url {
 	conn := db.ConnectDB()
 	defer conn.Close()
@@ -46,6 +48,14 @@ func UrlBySource(src string) *Url {
 	rows, _ := conn.Select(URLS_TABLE, urlUsrCols(), "source = ?", src)
 
 	return loadUrl(rows)
+}
+
+func IncrementVisits(path string) {
+	conn := db.ConnectDB()
+	defer conn.Close()
+
+	cols := db.Cols("viscount = (viscount + 1)")
+	conn.Update("untracked_visits", cols, "alt = ?", path)
 }
 
 // loadUser populates a new User instance with fields from an SQL row.

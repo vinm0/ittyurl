@@ -43,7 +43,7 @@ func (s *Session) Clear(w http.ResponseWriter, r *http.Request) {
 func (s *Session) User() (usr *data.User) {
 	usr, ok := s.Values[SESSION_USR].(*data.User)
 	if !ok {
-		usr = &data.User{UserID: data.USERID_PUB}
+		usr = &data.User{UserID: data.USERID_PUBLIC}
 	}
 	return usr
 }

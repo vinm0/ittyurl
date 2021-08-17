@@ -13,6 +13,12 @@ const (
 	MAX_PATH_CHAR = 10
 )
 
+func RegisteredPath(path string) (url *Url, found bool) {
+	url = UrlBySource(path)
+
+	return url, (url != nil)
+}
+
 func RandomPath() string {
 	pathLen := Rand(MIN_PATH_CHAR, MAX_PATH_CHAR)
 	path := make([]byte, pathLen)
