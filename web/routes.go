@@ -10,11 +10,13 @@ const (
 
 	// Domain Paths
 	PATH_HOME    = "/"
-	PATH_SIGNIN  = "/signin"
-	PATH_SIGNOUT = "/signout"
-	PATH_PROFILE = "/profile"
-	PATH_PRIVACY = "/privacy"
-	PATH_TERMS   = "/terms"
+	PATH_SIGNIN  = "/signin/"
+	PATH_SIGNUP  = "/signup/"
+	PATH_SIGNOUT = "/signout/"
+	PATH_PROFILE = "/profile/"
+	PATH_PRIVACY = "/privacy/"
+	PATH_TERMS   = "/terms/"
+	PATH_NEW     = "/new/"
 )
 
 func Launch() {
@@ -22,6 +24,9 @@ func Launch() {
 	http.HandleFunc(PATH_SIGNOUT, handleSignout)
 	http.HandleFunc(PATH_PRIVACY, handleStaticPage)
 	http.HandleFunc(PATH_TERMS, handleStaticPage)
+
+	http.HandleFunc(PATH_NEW, handleNew)
+
 	http.HandleFunc(PATH_HOME, handleHome)
 
 	http.Handle("/static/",

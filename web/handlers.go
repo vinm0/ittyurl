@@ -4,47 +4,81 @@ import (
 	"net/http"
 )
 
-type Page map[string]interface{}
+// page contains the data to be processed within a template.
+// Please use NewPage to initialize a new page instance.
+// A title value is always required.
+type page map[string]interface{}
 
-func (p *Page) Get(name string) interface{} {
-	return (*p)[name]
+// Get returns the value corresponding the named key.
+// Returns nil if no such key exists.
+func (p *page) Get(key string) interface{} {
+	return (*p)[key]
 }
 
-func (p *Page) Add(name string, val interface{}) {
-	(*p)[name] = val
+// Add assigns a key-value pair to the Page.
+// Add will overwrite any existing value with the same key.
+func (p *page) Add(key string, val interface{}) {
+	(*p)[key] = val
 }
 
-func newPage(title string) *Page {
-	return &Page{TITLE: title}
+// Serve passes data to templates to include in an http response.
+func (p *page) Serve(w http.ResponseWriter, templates ...string) {
+	Render(p, w, templates...)
 }
 
+// NewPage returns a new Page instance populated with the provided title.
+// A title is required for every page instance.
+func NewPage(title string) *page {
+	return &page{TITLE: title}
+}
+
+// Handles the root path and all undefined paths
 func handleHome(w http.ResponseWriter, r *http.Request) {
+	// Unrecognized paths will be directed to custom 404
 	if r.URL.Path != "/" {
 		handleStaticPage(w, r)
 		return
 	}
 
-	p := newPage(TITLE_SITE)
+	p := NewPage(TITLE_SITE)
 
-	p.Render(w, TMPL_BASE, TMPL_HOME)
+	p.Serve(w, TMPL_BASE, TMPL_HOME)
+}
+
+// Handles Post requests for new rows in the database
+func handleNew(w http.ResponseWriter, r *http.Request) {
+	if GetRequest(r) {
+		handleStaticPage(w, r)
+		return
+	}
+
+	category := r.URL.Query().Get("")
+
+	switch category {
+	case "url":
+		NewUrl(w, r)
+
+	case "user":
+		NewUser(w, r)
+	}
 }
 
 func handleSignin(w http.ResponseWriter, r *http.Request) {
 	session := CurrentSession(r)
 
-	if auth, _ := session.Values["authenticated"].(bool); auth {
+	if auth, _ := session.Values[SESSION_AUTH].(bool); auth {
 		http.Redirect(w, r, PATH_PROFILE, http.StatusFound)
 		return
 	}
 
-	if PostMethod(r) {
+	if PostRequest(r) {
 		Signin(w, r)
 		return
 	}
 
-	p := newPage(TITLE_SIGNIN)
+	p := NewPage(TITLE_SIGNIN)
 
-	p.Render(w, TMPL_BASE, TMPL_SIGNIN)
+	p.Serve(w, TMPL_BASE, TMPL_SIGNIN)
 }
 
 func handleSignout(w http.ResponseWriter, r *http.Request) {
@@ -66,15 +100,25 @@ func handleStaticPage(w http.ResponseWriter, r *http.Request) {
 		title = TITLE_TERMS
 		templ = TMPL_TERMS
 	default:
-		title = "Page Not Found"
+		title = TITLE_ERR
 		templ = TMPL_ERR
 	}
 
-	p := newPage(title)
+	p := NewPage(title)
 
-	p.Render(w, TMPL_BASE, templ)
+	p.Serve(w, TMPL_BASE, templ)
 }
 
-func PostMethod(r *http.Request) bool {
+func (s *Session) RedirectFlash(r *http.Request, w http.ResponseWriter, path, msg string) {
+	s.AddFlash(msg)
+	s.Save(r, w)
+	http.Redirect(w, r, path, http.StatusFound)
+}
+
+func PostRequest(r *http.Request) bool {
 	return r.Method == http.MethodPost
+}
+
+func GetRequest(r *http.Request) bool {
+	return r.Method == http.MethodGet
 }

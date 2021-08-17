@@ -22,12 +22,15 @@ const (
 	TMPL_PRIVACY = TMPL_DIR + "privacy.html"
 	TMPL_TERMS   = TMPL_DIR + "terms.html"
 	TMPL_ERR     = TMPL_DIR + "brokenlink.html"
+	TMPL_SIGNUP  = TMPL_DIR + "signup.html"
 
 	TITLE         = "title"
 	TITLE_SITE    = "IttyURL"
 	TITLE_SIGNIN  = "Sign-in"
+	TITLE_SIGNUP  = "Sign-up"
 	TITLE_PRIVACY = "Privacy"
 	TITLE_TERMS   = "Terms and Conditions"
+	TITLE_ERR     = "Page Not Found"
 )
 
 var (
@@ -50,7 +53,7 @@ type Template struct {
 // If a template exists, Render calls to execute the existing template.
 // If a template does not exist, Render parses the specified templates,
 // registers the template, and executes the new template.
-func (p *Page) Render(w http.ResponseWriter, templates ...string) {
+func Render(p *page, w http.ResponseWriter, templates ...string) {
 	InitTmap()
 
 	title, _ := p.Get(TITLE).(string)
@@ -72,7 +75,7 @@ func (p *Page) Render(w http.ResponseWriter, templates ...string) {
 }
 
 // Serve executes the template provided by the receiver
-func (t *Template) Serve(w http.ResponseWriter, p *Page) {
+func (t *Template) Serve(w http.ResponseWriter, p *page) {
 	err := t.template.Execute(w, p)
 	if err != nil {
 		log.Println(err.Error(), t.template)
