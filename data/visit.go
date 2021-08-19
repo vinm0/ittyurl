@@ -14,10 +14,11 @@ type Visit struct {
 	IP      net.IP
 }
 
+// TODO: Add logic to record the visit into the database.
 func (vis *Visit) InsertVisit() {
-	//
 }
 
+// Extract visit data from the request header.
 func extractVisit(r *http.Request) *Visit {
 	ip := net.ParseIP(strings.Split(r.Header.Get("X-Forwarded-For"), " ")[0])
 

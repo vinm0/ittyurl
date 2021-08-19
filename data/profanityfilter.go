@@ -4,6 +4,9 @@ package data
 // * * This module contains lists of unacceptable url paths (i.e. url_id)  **
 // *************************************************************************
 
+// TODO: Implement trie data structure
+//
+// The list of illegal substrings in randomly generated paths.
 var StrongFilter = [][]byte{
 	[]byte("5h1t"),
 	[]byte("5hit"),

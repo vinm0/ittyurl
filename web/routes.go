@@ -19,7 +19,7 @@ const (
 	PATH_NEW     = "/new/"
 )
 
-func Launch() {
+func LaunchRouter() {
 	http.HandleFunc(PATH_SIGNIN, handleSignin)
 	http.HandleFunc(PATH_SIGNOUT, handleSignout)
 	http.HandleFunc(PATH_PRIVACY, handleStaticPage)

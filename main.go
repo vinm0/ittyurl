@@ -9,5 +9,5 @@ func main() {
 	web.SessionStart()
 	data.RegisterStructs()
 
-	web.Launch()
+	web.LaunchRouter()
 }

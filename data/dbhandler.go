@@ -31,11 +31,13 @@ func FindUsr(email string) (usr *User, found bool) {
 	return dbUsr, (dbUsr != nil)
 }
 
+// Inserts the User data into the database.
 func createUser(usr *User) error {
 	return insert(usr)
 }
 
-func createUrl(url *Url) error {
+// Inserts the Url data into the database.
+func insertUrl(url *Url) error {
 	return insert(url)
 }
 
@@ -50,6 +52,7 @@ func UrlBySource(src string) *Url {
 	return loadUrl(rows)
 }
 
+// Increment's the visit count for the existing path.
 func IncrementVisits(path string) {
 	conn := db.ConnectDB()
 	defer conn.Close()
@@ -80,6 +83,9 @@ func loadUser(row *sql.Rows, pwd bool) (usr *User) {
 	return usr
 }
 
+// Populates a new Url instance with fields from an SQL row.
+// Returns a pointer to the populated instance if the row contains fields.
+// Otherwise, returns nil.
 func loadUrl(row *sql.Rows) (url *Url) {
 	defer row.Close()
 
@@ -126,10 +132,14 @@ func usrColsPwd(pwd bool) (cols []string) {
 	return cols
 }
 
+// Returns the column names for a JOINed usrs and urls table.
+//
+// ** Used for retreiving data for a Url instance (including Owner) **
 func urlUsrCols() (cols []string) {
 	return append(urlCols(), usrCols()...)
 }
 
+// Returns the column names for the urls table.
 func urlCols() (cols []string) {
 	return []string{
 		"alt",
@@ -140,6 +150,9 @@ func urlCols() (cols []string) {
 	}
 }
 
+// Returns the vals of the obj of a predetermined type.
+//
+// *User | *Url
 func Vals(obj interface{}) []interface{} {
 	if usr, ok := obj.(*User); ok {
 		return db.Vals(usr.UserID, usr.Fname, usr.Lname, usr.Email,
@@ -154,6 +167,9 @@ func Vals(obj interface{}) []interface{} {
 	return nil
 }
 
+// Inserts data into the database of objects of a predetermined type
+//
+// *User | *Url
 func insert(data interface{}) (err error) {
 	conn := db.ConnectDB()
 	defer conn.Close()

@@ -23,6 +23,7 @@ var store *sessions.CookieStore
 
 type Session struct{ *sessions.Session }
 
+// Returns the the current session data.
 func CurrentSession(r *http.Request) (session *Session) {
 	s, _ := store.Get(r, SESSION)
 	session = &Session{s}
@@ -30,16 +31,20 @@ func CurrentSession(r *http.Request) (session *Session) {
 	return session
 }
 
+// Initializes the session.
 func SessionStart() {
 	godotenv.Load(".env")
 	store = sessions.NewCookieStore([]byte(os.Getenv(SESSION_KEY)))
 }
 
+// Clears the session of all values.
 func (s *Session) Clear(w http.ResponseWriter, r *http.Request) {
 	s.Values = map[interface{}]interface{}{}
 	s.Save(r, w)
 }
 
+// Returns usr populated with User data from the session.
+// Returns nil, if no User data exists in the session.
 func (s *Session) User() (usr *data.User) {
 	usr, ok := s.Values[SESSION_USR].(*data.User)
 	if !ok {

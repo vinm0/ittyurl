@@ -12,6 +12,7 @@ const (
 
 )
 
+// Prepares a string to create an SQL statement.
 func prepString(crud int, table string, cols []string, condition string, valsLen int) string {
 	retStr := make([]string, CRUD_MAX)
 	copy(retStr, sqlCRUD[crud])
@@ -48,6 +49,9 @@ func prepString(crud int, table string, cols []string, condition string, valsLen
 	return strings.Join(retStr, "")
 }
 
+// Inserts safe characters, "?", into an sql statment.
+//
+// Used for INSERT commands
 func safeMarkers(colsLen int, valsLen int) string {
 	b := strings.Builder{}
 
@@ -63,6 +67,9 @@ func safeMarkers(colsLen int, valsLen int) string {
 	return strings.TrimSuffix(b.String(), ",")
 }
 
+// Inserts safe characters, " = ?", following each column name.
+//
+// Used for UPDATE commands
 func sanatizeCols(cols []string) []string {
 	for i, v := range cols {
 		cols[i] = v + " = ?"

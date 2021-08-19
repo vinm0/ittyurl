@@ -24,6 +24,9 @@ var (
 
 type DB struct{ *sql.DB }
 
+// Creates a connection to the database.
+//
+// Please use "defer conn.Close()" to close the connection.
 func ConnectDB() (conn *DB) {
 	db, err := sql.Open(DB_DRIVER, DB_PATH)
 	if err != nil {

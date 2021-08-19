@@ -19,8 +19,10 @@ type Url struct {
 	CreatorIP   net.IP
 }
 
+// TODO: Record visit if Owner AcctType permits.
+//
+// Calls to update database based on permissions of the owner's account type.
 func (url *Url) TrackVisit(r *http.Request) {
-	// TODO: Record visit if Owner AcctType permits.
 	switch acct := url.Owner.AcctID; {
 	case acct >= ACCTTYPE_PAID:
 		vis := extractVisit(r)
@@ -30,11 +32,17 @@ func (url *Url) TrackVisit(r *http.Request) {
 	}
 }
 
+// Returns the Url instance if it exists in the database.
+//
+// If Url does not exist, original is nil.
 func (u *Url) DuplicateSource() (original *Url, duplicate bool) {
 	original = UrlBySource(u.Source)
 	return original, (original != nil)
 }
 
+// Returns the Url data extracted from the POST request.
+//
+// A URL instance is always returned.
 func UrlFromForm(r *http.Request, usr *User) *Url {
 	ip := net.ParseIP(strings.Split(r.Header.Get("X-Forwarded-For"), " ")[0])
 

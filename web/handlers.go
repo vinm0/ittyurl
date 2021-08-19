@@ -36,20 +36,20 @@ func NewPage(title string) *page {
 
 // Handles the root path and all undefined paths
 func handleHome(w http.ResponseWriter, r *http.Request) {
-	// Unrecognized paths will be directed to custom 404
+	// Serve home page if the root path is the target
 	if r.URL.Path == PATH_HOME {
 		p := NewPage(TITLE_SITE)
 		p.Serve(w, TMPL_BASE, TMPL_HOME)
 		return
 	}
 
-	if path, found := data.RegisteredPath(r.URL.Path); found {
-		http.Redirect(w, r, path, http.StatusFound)
+	if url, found := data.RegisteredPath(r.URL.Path); found {
+		url.TrackVisit(r)
+		http.Redirect(w, r, url.Source, http.StatusFound)
 		return
 	}
 
 	handleStaticPage(w, r)
-	return
 }
 
 // Handles Post requests for new rows in the database
@@ -70,6 +70,11 @@ func handleNew(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GET: Serves the sign-in page if no client is signed in.
+// Redirects to the client's profile page if a client is signed in.
+//
+// POST: Signs in client and redirects to client's profile page.
+// If sign-in is unsuccessful, redirects to sign-in page.
 func handleSignin(w http.ResponseWriter, r *http.Request) {
 	session := CurrentSession(r)
 
@@ -88,6 +93,7 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 	p.Serve(w, TMPL_BASE, TMPL_SIGNIN)
 }
 
+// Removes the client's session data and redirects to the root page.
 func handleSignout(w http.ResponseWriter, r *http.Request) {
 	session := CurrentSession(r)
 	session.Clear(w, r)
@@ -95,6 +101,8 @@ func handleSignout(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
+// Serves a static page or recognized in the domain,
+// including a custom 404.
 func handleStaticPage(w http.ResponseWriter, r *http.Request) {
 	title := ""
 	templ := ""
@@ -116,16 +124,21 @@ func handleStaticPage(w http.ResponseWriter, r *http.Request) {
 	p.Serve(w, TMPL_BASE, templ)
 }
 
+// Adds a flash message to the session and redirects to the specified page.
+// RedirectFlash is intended for informing the client of possible errors
+// that have occurred during a POST request.
 func (s *Session) RedirectFlash(r *http.Request, w http.ResponseWriter, path, msg string) {
 	s.AddFlash(msg)
 	s.Save(r, w)
 	http.Redirect(w, r, path, http.StatusFound)
 }
 
+// Returns true if r contains a POST request
 func PostRequest(r *http.Request) bool {
 	return r.Method == http.MethodPost
 }
 
+// Returns true if r contains a GET request
 func GetRequest(r *http.Request) bool {
 	return r.Method == http.MethodGet
 }

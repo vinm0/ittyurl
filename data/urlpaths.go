@@ -13,12 +13,15 @@ const (
 	MAX_PATH_CHAR = 10
 )
 
-func RegisteredPath(path string) (url *Url, found bool) {
-	url = UrlBySource(path)
+// Returns the Url instance with the provided source url, if it exists.
+// Returns nil, if the path does not exist
+func RegisteredPath(source string) (url *Url, found bool) {
+	url = UrlBySource(source)
 
 	return url, (url != nil)
 }
 
+// Returns a randomized string of legal characters
 func RandomPath() string {
 	pathLen := Rand(MIN_PATH_CHAR, MAX_PATH_CHAR)
 	path := make([]byte, pathLen)
@@ -35,12 +38,14 @@ func RandomPath() string {
 	return string(path)
 }
 
+// Returns a random number between min and max, inclusive.
 func Rand(min int, max int) int {
 	rand.Seed(time.Now().UnixNano())
 	r := (rand.Int() % (max - min)) + min
 	return r
 }
 
+// Returns true if path contains none of the prohibited substrings.
 func HasProfanity(path []byte) bool {
 	for _, word := range StrongFilter {
 		if bytes.Contains(path, word) {
