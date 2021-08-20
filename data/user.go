@@ -2,10 +2,8 @@ package data
 
 import (
 	"fmt"
-	"net"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -45,8 +43,10 @@ func (usr *User) CreateUser() (errMsg string) {
 //
 // If the site's policies permit, the Url is inserted into the database.
 // If the site's policies do not permit, an errMsg is returned with the new Url.
+//
+// A Url pointer is always returned
 func (usr *User) CreateUrl(r *http.Request) (url *Url, errMsg string) {
-	ip := net.ParseIP(strings.Split(r.Header.Get("X-Forwarded-For"), " ")[0])
+	ip := ipAddr(r)
 
 	fmt.Println("Raw Header IP:", r.Header.Get("X-Forwarded-For"))
 	fmt.Println("Formatted IP:", ip)
@@ -55,11 +55,17 @@ func (usr *User) CreateUrl(r *http.Request) (url *Url, errMsg string) {
 		return nil, "Exceeded url creation limits"
 	}
 
-	url = UrlFromForm(r, usr)
-	if u, exists := url.DuplicateSource(); exists {
-		return u, ""
+	// If Url already exists in the database, return the exising Url.
+	url = UrlBySource(r.PostFormValue("source"))
+	if url != nil {
+		fmt.Println("previous url found.", url)
+		return url, ""
 	}
 
+	// Extract Url from POST form
+	url = UrlFromPost(r, usr)
+
+	// Communicate error with client if database error occurs.
 	if err := insertUrl(url); err != nil {
 		errMsg = "There was a problem connecting to the database."
 	}
@@ -70,7 +76,7 @@ func (usr *User) CreateUrl(r *http.Request) (url *Url, errMsg string) {
 // TODO: Query validate limits.
 //
 // Returns true if the user has exceeded the account type's url limits.
-func (usr *User) exceedUrlLmit(ip net.IP) bool {
+func (usr *User) exceedUrlLmit(ip string) bool {
 	return false
 }
 

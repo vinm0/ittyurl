@@ -1,14 +1,13 @@
 package data
 
 import (
-	"net"
 	"net/http"
 	"strings"
 	"time"
 )
 
 const (
-	URLS_TABLE = "urls JOIN users ON (owner_id = user_id)"
+	URLS_TABLE = "urls JOIN usrs ON (owner_id = usr_id)"
 )
 
 type Url struct {
@@ -16,7 +15,7 @@ type Url struct {
 	Source      string
 	DateCreated time.Time
 	Owner       *User
-	CreatorIP   net.IP
+	CreatorIP   string
 }
 
 // TODO: Record visit if Owner AcctType permits.
@@ -43,14 +42,16 @@ func (u *Url) DuplicateSource() (original *Url, duplicate bool) {
 // Returns the Url data extracted from the POST request.
 //
 // A URL instance is always returned.
-func UrlFromForm(r *http.Request, usr *User) *Url {
-	ip := net.ParseIP(strings.Split(r.Header.Get("X-Forwarded-For"), " ")[0])
-
+func UrlFromPost(r *http.Request, usr *User) *Url {
 	return &Url{
 		Path:        RandomPath(),
 		Source:      r.PostFormValue("source"),
 		DateCreated: time.Now(),
 		Owner:       usr,
-		CreatorIP:   ip,
+		CreatorIP:   ipAddr(r),
 	}
+}
+
+func ipAddr(r *http.Request) string {
+	return strings.Split(r.Header.Get("X-Forwarded-For"), ", ")[0]
 }

@@ -3,11 +3,13 @@ package db
 import (
 	"database/sql"
 	"log"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 const (
 	DB_DRIVER = "sqlite3"
-	DB_PATH   = "/database/ittyurl.db"
+	DB_PATH   = "./database/ittyurl.db"
 )
 
 var (

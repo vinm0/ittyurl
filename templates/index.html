@@ -1,7 +1,7 @@
 {{define "content"}}
 
   <header>
-    <h1 class="page-title">Itty URL</h1>
+    <h1 class="page-title">{{.title}}</h1>
   </header>
 
   <main>
@@ -9,9 +9,9 @@
 
       <form action="/new/?=url" method="post" class="generic-url">
         <div>
-          <label for="destination_url"><pre>Enter url to shorten</pre></label>
-          <input type="text" title="Enter url" required maxlength="2000" name="destination_url" 
-                 id="destination_url" placeholder="https://" value="" 
+          <label for="source"><pre>Enter url to shorten</pre></label>
+          <input type="text" title="Enter url" required maxlength="2000" name="source" 
+                 id="destination_url" placeholder="https://" value="{{.url.Source}}" 
                  oninvalid="setCustomValidity('Max characters exceeded: 2000')">
         </div>
         <button type="submit" class="ittify" title="Click to shorten url"><h3>ittify</h3></button>
@@ -22,8 +22,8 @@
     <br><br>
 
     <section class="generated-url-section">
-      <span class="generated-url center-content">ittyurl.me/{{.alt}}</span><br>
-      <input type="text" id="copy-url" name="copy-url" value="ittyurl.me/{{.alt}}"><br>
+      <span class="generated-url center-content {{or .url.Path "hidden"}}">ittyurl.me/{{.url.Path}}</span><br>
+      <input type="text" id="copy-url" name="copy-url" value="ittyurl.me/{{.url.Path}}"><br>
       <button id="copy-btn" title="Click to copy url" onclick="copyUrl()">Copy Url</button>
     </section>
     

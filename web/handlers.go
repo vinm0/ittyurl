@@ -1,10 +1,20 @@
 package web
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/vinm0/ittyurl/data"
 )
+
+/*
+ * **********************************************
+ * ************                    **************
+ * ************    Page Content    **************
+ * ************                    **************
+ * **********************************************
+ */
 
 // page contains the data to be processed within a template.
 // Please use NewPage to initialize a new page instance.
@@ -34,18 +44,37 @@ func NewPage(title string) *page {
 	return &page{TITLE: title}
 }
 
+/*
+ * **********************************************
+ * **************                ****************
+ * **************    Handlers    ****************
+ * **************                ****************
+ * **********************************************
+ */
+
 // Handles the root path and all undefined paths
 func handleHome(w http.ResponseWriter, r *http.Request) {
+
 	// Serve home page if the root path is the target
 	if r.URL.Path == PATH_HOME {
 		p := NewPage(TITLE_SITE)
+
+		session := CurrentSession(r)
+		if url, ok := session.Values["url"].(data.Url); ok {
+			p.Add("url", url)
+			session.Del(w, r, "url")
+		}
+
 		p.Serve(w, TMPL_BASE, TMPL_HOME)
 		return
 	}
 
-	if url, found := data.RegisteredPath(r.URL.Path); found {
+	path := strings.TrimPrefix(r.URL.Path, "/")
+
+	if url, found := data.RegisteredPath(path); found {
 		url.TrackVisit(r)
-		http.Redirect(w, r, url.Source, http.StatusFound)
+		fmt.Println("Redirecting to ", url.Source)
+		http.Redirect(w, r, "https://"+url.Source, http.StatusSeeOther)
 		return
 	}
 
@@ -123,6 +152,14 @@ func handleStaticPage(w http.ResponseWriter, r *http.Request) {
 
 	p.Serve(w, TMPL_BASE, templ)
 }
+
+/*
+ * **********************************************
+ * ***************               ****************
+ * ***************    Helpers    ****************
+ * ***************               ****************
+ * **********************************************
+ */
 
 // Adds a flash message to the session and redirects to the specified page.
 // RedirectFlash is intended for informing the client of possible errors

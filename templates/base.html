@@ -10,8 +10,10 @@
   </head>
   <body>
     <nav>
-      <a class="logo" href="/">IttyUrl</a>
-      <a href="#" class="sign-in hidden">Sign-in</a>
+      {{if (ne .title "IttyURL")}}
+      <a class="logo" href="/">{{.title}}</a>
+      {{end}}
+      <a href="#" class="sign-in hidden {{and .usr.Usrname "hidden"}}">Sign-in</a>
     </nav>
 
 {{template "content" .}}
@@ -26,7 +28,7 @@
       </small>
     </footer>
 
-    <script type="text/js" src="/static/scripts/script.js"></script>
+    <script src="/static/scripts/script.js"></script>
   </body>
 </html>
 

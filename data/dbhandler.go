@@ -2,7 +2,9 @@ package data
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+	"time"
 
 	"github.com/vinm0/ittyurl/db"
 )
@@ -31,6 +33,20 @@ func FindUsr(email string) (usr *User, found bool) {
 	return dbUsr, (dbUsr != nil)
 }
 
+func FindUrl(path string) (url *Url, found bool) {
+	conn := db.ConnectDB()
+	defer conn.Close()
+
+	row, err := conn.Select(URLS_TABLE, urlUsrCols(), "alt = ?", path)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	dbUsr := loadUrl(row)
+
+	return dbUsr, (dbUsr != nil)
+}
+
 // Inserts the User data into the database.
 func createUser(usr *User) error {
 	return insert(usr)
@@ -42,12 +58,14 @@ func insertUrl(url *Url) error {
 }
 
 // UrlBySource returns the Url instance with the corresponding src url address.
+//
 // Returns nil, if no Url is found.
 func UrlBySource(src string) *Url {
 	conn := db.ConnectDB()
 	defer conn.Close()
 
 	rows, _ := conn.Select(URLS_TABLE, urlUsrCols(), "source = ?", src)
+	fmt.Println("Source url:", src)
 
 	return loadUrl(rows)
 }
@@ -92,10 +110,15 @@ func loadUrl(row *sql.Rows) (url *Url) {
 	if row.Next() {
 		url = &Url{}
 		usr := &User{}
-		row.Scan(url.Path, url.Source, url.DateCreated, usr.UserID,
-			url.CreatorIP, usr.UserID, usr.Fname, usr.Lname, usr.Email,
-			usr.Usrname, usr.Joindate, usr.AcctID)
+		urlDate := ""
+		usrDate := ""
+		row.Scan(&url.Path, &url.Source, &urlDate, &usr.UserID,
+			&url.CreatorIP, &usr.UserID, &usr.Fname, &usr.Lname, &usr.Email,
+			&usr.Usrname, &usrDate, &usr.AcctID,
+		)
 
+		usr.Joindate, _ = time.Parse(TIME_FORMAT, usrDate)
+		url.DateCreated, _ = time.Parse(TIME_FORMAT, urlDate)
 		url.Owner = usr
 	}
 
@@ -156,12 +179,12 @@ func urlCols() (cols []string) {
 func Vals(obj interface{}) []interface{} {
 	if usr, ok := obj.(*User); ok {
 		return db.Vals(usr.UserID, usr.Fname, usr.Lname, usr.Email,
-			usr.Usrname, usr.Joindate.String(), usr.AcctID, usr.Pwd)
+			usr.Usrname, usr.Joindate.Format(TIME_FORMAT), usr.AcctID, usr.Pwd)
 	}
 
 	if url, ok := obj.(*Url); ok {
-		return db.Vals(url.Path, url.Source, url.Owner.UserID,
-			url.DateCreated.String(), url.CreatorIP.String())
+		return db.Vals(url.Path, url.Source, url.DateCreated.Format(TIME_FORMAT),
+			url.Owner.UserID, url.CreatorIP)
 	}
 
 	return nil
@@ -176,9 +199,9 @@ func insert(data interface{}) (err error) {
 
 	switch data.(type) {
 	case *User:
-		_, err = conn.Insert(USRS_TABLE, usrCols(), Vals(data))
+		_, err = conn.Insert(USRS_TABLE, usrCols(), Vals(data)...)
 	case *Url:
-		_, err = conn.Insert("urls", urlCols(), Vals(data))
+		_, err = conn.Insert("urls", urlCols(), Vals(data)...)
 	}
 
 	return err

@@ -6,6 +6,8 @@ import (
 	"github.com/vinm0/ittyurl/data"
 )
 
+// Creates a new Url object from POST form data.
+// The url is saved to the session.
 func NewUrl(w http.ResponseWriter, r *http.Request) {
 	session := CurrentSession(r)
 	usr := session.User()
@@ -19,6 +21,7 @@ func NewUrl(w http.ResponseWriter, r *http.Request) {
 	session.Values["url"] = url
 	session.Save(r, w)
 
+	http.Redirect(w, r, PATH_HOME, http.StatusFound)
 }
 
 func NewUser(w http.ResponseWriter, r *http.Request) {

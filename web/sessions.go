@@ -39,16 +39,28 @@ func SessionStart() {
 
 // Clears the session of all values.
 func (s *Session) Clear(w http.ResponseWriter, r *http.Request) {
-	s.Values = map[interface{}]interface{}{}
+	// s.Values = map[interface{}]interface{}{}
+	s.Options.MaxAge = -1
 	s.Save(r, w)
 }
 
+// Removes the key and it's corresponding value from the session map.
+func (s *Session) Del(w http.ResponseWriter, r *http.Request, key string) {
+	if _, ok := s.Values[key]; ok {
+		delete(s.Values, key)
+		s.Save(r, w)
+	}
+}
+
 // Returns usr populated with User data from the session.
-// Returns nil, if no User data exists in the session.
+// Returns a public User, if no User data exists in the session.
 func (s *Session) User() (usr *data.User) {
 	usr, ok := s.Values[SESSION_USR].(*data.User)
 	if !ok {
-		usr = &data.User{UserID: data.USERID_PUBLIC}
+		usr = &data.User{
+			UserID: data.USERID_PUBLIC,
+			AcctID: data.ACCTTYPE_PUBL,
+		}
 	}
 	return usr
 }
