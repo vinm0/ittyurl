@@ -65,6 +65,9 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 			session.Del(w, r, "url")
 		}
 
+		p.Add("err", session.Values["err"])
+		session.Del(w, r, "err")
+
 		p.Serve(w, TMPL_BASE, TMPL_HOME)
 		return
 	}
@@ -74,7 +77,7 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 	if url, found := data.RegisteredPath(path); found {
 		url.TrackVisit(r)
 		fmt.Println("Redirecting to ", url.Source)
-		http.Redirect(w, r, "https://"+url.Source, http.StatusSeeOther)
+		http.Redirect(w, r, url.Source, http.StatusSeeOther)
 		return
 	}
 
@@ -160,15 +163,6 @@ func handleStaticPage(w http.ResponseWriter, r *http.Request) {
  * ***************               ****************
  * **********************************************
  */
-
-// Adds a flash message to the session and redirects to the specified page.
-// RedirectFlash is intended for informing the client of possible errors
-// that have occurred during a POST request.
-func (s *Session) RedirectFlash(r *http.Request, w http.ResponseWriter, path, msg string) {
-	s.AddFlash(msg)
-	s.Save(r, w)
-	http.Redirect(w, r, path, http.StatusFound)
-}
 
 // Returns true if r contains a POST request
 func PostRequest(r *http.Request) bool {

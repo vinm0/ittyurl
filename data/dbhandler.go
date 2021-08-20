@@ -79,6 +79,14 @@ func IncrementVisits(path string) {
 	conn.Update("untracked_visits", cols, "alt = ?", path)
 }
 
+func CountUrlsByUserID(id int) int {
+	return countUrls(id)
+}
+
+func CountUrlsByIP(ip string) int {
+	return countUrls(ip)
+}
+
 // loadUser populates a new User instance with fields from an SQL row.
 // Use pwd to indicate whether the User password is included in the query.
 // Returns a pointer to the populated instance if the row contains fields.
@@ -205,4 +213,28 @@ func insert(data interface{}) (err error) {
 	}
 
 	return err
+}
+
+// Returns the row count of Urls given a specified condition
+func countUrls(id interface{}) int {
+	conn := db.ConnectDB()
+	defer conn.Close()
+
+	cols := db.Cols("COUNT(*)")
+
+	var rows *sql.Rows
+	switch id.(type) {
+	case int: // UserID
+		rows, _ = conn.Select("urls", cols, "owner_id = ?", id)
+	case string: // IP
+		rows, _ = conn.Select("urls", cols, "creatorip = ?", id)
+	}
+	defer rows.Close()
+
+	var count int
+	if rows.Next() {
+		rows.Scan(&count)
+	}
+
+	return count
 }

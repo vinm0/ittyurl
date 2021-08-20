@@ -6,6 +6,9 @@
 
   <main>
     <section class="home-form">
+      <div class="err-msg">
+        <p class="err-msg">{{.err}}</p>
+      </div>
 
       <form action="/new/?=url" method="post" class="generic-url">
         <div>
@@ -24,7 +27,7 @@
     <section class="generated-url-section">
       <span class="generated-url center-content {{or .url.Path "hidden"}}">ittyurl.me/{{.url.Path}}</span><br>
       <input type="text" id="copy-url" name="copy-url" value="ittyurl.me/{{.url.Path}}"><br>
-      <button id="copy-btn" title="Click to copy url" onclick="copyUrl()">Copy Url</button>
+      <button id="copy-btn" title="Click to copy url" onclick="copyUrl()" class="{{or .url.Path "hidden"}}">Copy Url</button>
     </section>
     
     <section class="signin-features hidden">

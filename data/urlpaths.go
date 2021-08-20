@@ -30,7 +30,8 @@ func RandomPath() string {
 		path[i] = LEGAL_CHARACTERS[ch]
 	}
 
-	for HasProfanity(path) {
+	// TODO: Test PathExists
+	for HasProfanity(path) || PathExists(string(path)) {
 		RandomPath()
 	}
 
@@ -51,4 +52,10 @@ func HasProfanity(path []byte) bool {
 		}
 	}
 	return false
+}
+
+func PathExists(path string) bool {
+	_, found := FindUrl(path)
+
+	return found
 }

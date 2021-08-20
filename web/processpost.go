@@ -1,6 +1,7 @@
 package web
 
 import (
+	"html/template"
 	"net/http"
 
 	"github.com/vinm0/ittyurl/data"
@@ -29,7 +30,7 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	usr := data.FormUser(r)
 
 	if usr == nil {
-		msg := "Something went wrong creating account. Try again"
+		var msg template.HTML = "Something went wrong creating account. Try again"
 		session.RedirectFlash(r, w, PATH_SIGNUP, msg)
 		return
 	}

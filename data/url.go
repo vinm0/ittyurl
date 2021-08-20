@@ -2,6 +2,7 @@ package data
 
 import (
 	"net/http"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -43,15 +44,37 @@ func (u *Url) DuplicateSource() (original *Url, duplicate bool) {
 //
 // A URL instance is always returned.
 func UrlFromPost(r *http.Request, usr *User) *Url {
+	// TODO: Validate Source url format (http[s]://), trim values
+	src := strings.TrimSpace(r.PostFormValue("source"))
+
 	return &Url{
 		Path:        RandomPath(),
-		Source:      r.PostFormValue("source"),
+		Source:      formatUrl(src),
 		DateCreated: time.Now(),
 		Owner:       usr,
 		CreatorIP:   ipAddr(r),
 	}
 }
 
+// Returns an string representation of the ip address extracted from
+// the http request.
 func ipAddr(r *http.Request) string {
-	return strings.Split(r.Header.Get("X-Forwarded-For"), ", ")[0]
+	ip := r.Header.Get("X-Real-Ip")
+	if ip == "" {
+		ip = strings.Split(r.Header.Get("X-Forwarded-For"), ", ")[0]
+	}
+	if ip == "" {
+		ip = strings.Split(r.RemoteAddr, ":")[0]
+	}
+	return ip
+}
+
+// Returns a url string with "https://" prepended.
+// Returns the original stirng if it already contains the http[s] protocal
+func formatUrl(source string) string {
+	if match, _ := regexp.MatchString("https?:\\/\\/", source); match {
+		return source
+	}
+
+	return "https://" + source
 }

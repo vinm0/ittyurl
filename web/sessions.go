@@ -1,6 +1,7 @@
 package web
 
 import (
+	"html/template"
 	"net/http"
 	"os"
 
@@ -63,4 +64,15 @@ func (s *Session) User() (usr *data.User) {
 		}
 	}
 	return usr
+}
+
+// Adds a flash message to the session and redirects to the specified page.
+// RedirectFlash is intended for informing the client of possible errors
+// that have occurred during a POST request.
+func (s *Session) RedirectFlash(r *http.Request, w http.ResponseWriter,
+	path string, msg template.HTML) {
+
+	s.Values["err"] = msg
+	s.Save(r, w)
+	http.Redirect(w, r, path, http.StatusFound)
 }

@@ -122,6 +122,18 @@ small a {
   font-size: 1.2rem;
 }
 
+.err-msg {
+  text-align: center;
+  color: #d3736f;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.err-msg a {
+  color: white;
+  font-size: 2rem;
+}
+
 /* 
   ********************
     3. Components
